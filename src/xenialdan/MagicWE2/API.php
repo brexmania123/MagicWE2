@@ -341,15 +341,20 @@ class API{
 				$meta = $b[1] & 0xFFFF;
 			}
 
-			if (is_numeric($b[0])){
-				$item = ItemFactory::get(((int)$b[0]) & 0xFFFF, $meta);
-			} elseif (defined(Item::class . "::" . strtoupper($b[0]))){
-				$item = ItemFactory::get(constant(Item::class . "::" . strtoupper($b[0])), $meta);
-				if ($item->getId() === Item::AIR and strtoupper($b[0]) !== "AIR"){
+			try{
+				if(is_numeric($b[0])){
+					$item = ItemFactory::get(((int) $b[0]) & 0xFFFF, $meta);
+				}elseif(defined(Item::class . "::" . strtoupper($b[0]))){
+					$item = ItemFactory::get(constant(Item::class . "::" . strtoupper($b[0])), $meta);
+					if($item->getId() === Item::AIR and strtoupper($b[0]) !== "AIR"){
+						$item = null;
+					}
+				}else{
 					$item = null;
 				}
-			} else{
-				$item = null;
+			} catch(\TypeError $e) {
+				Loader::getInstance()->getLogger()->error("Failed to fetch item from string!");
+				Loader::getInstance()->getLogger()->logException($e);
 			}
 
 			return [$b[0], $item];

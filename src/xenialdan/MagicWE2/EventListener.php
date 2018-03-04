@@ -53,7 +53,7 @@ class EventListener implements Listener{
 			/** @var Session $session */
 			$session = API::getSession($event->getPlayer());
 			if (is_null($session)){
-				throw new \Exception("No session was created - probably no permission to use " . $this->owner->getName());
+				throw new \RuntimeException("No session was created - probably no permission to use " . $this->owner->getName());
 			}
 			switch ($event->getItem()->getId()){
 				case ItemIds::WOODEN_AXE: {
@@ -64,7 +64,7 @@ class EventListener implements Listener{
 					}
 					$selection = $session->getLatestSelection() ?? $session->addSelection(new Selection($event->getBlock()->getLevel())); // TODO check if the selection inside of the session updates
 					if (is_null($selection)){
-						throw new \Error("No selection created - Check the console for errors");
+						throw new \RuntimeException("No selection created - Check the console for errors");
 					}
 					$event->getPlayer()->sendMessage($selection->setPos1(new Position($event->getBlock()->x, $event->getBlock()->y, $event->getBlock()->z, $event->getBlock()->getLevel())));
 					break;
@@ -88,7 +88,7 @@ class EventListener implements Listener{
 			/** @var Session $session */
 			$session = API::getSession($event->getPlayer());
 			if (is_null($session)){
-				throw new \Exception("No session was created - probably no permission to use " . $this->owner->getName());
+				throw new \RuntimeException("No session was created - probably no permission to use " . $this->owner->getName());
 			}
 			switch ($event->getItem()->getId()){
 				/*case ItemIds::WOODEN_SHOVEL: { //TODO Open issue on pmmp, RIGHT_CLICK_BLOCK + RIGHT_CLICK_AIR are BOTH called when right clicking a block - Turns out to be a client bug
@@ -106,7 +106,7 @@ class EventListener implements Listener{
 					}
 					$selection = $session->getLatestSelection() ?? $session->addSelection(new Selection($event->getBlock()->getLevel())); // TODO check if the selection inside of the session updates
 					if (is_null($selection)){
-						throw new \Error("No selection created - Check the console for errors");
+						throw new \RuntimeException("No selection created - Check the console for errors");
 					}
 					$event->getPlayer()->sendMessage($selection->setPos2(new Position($event->getBlock()->x, $event->getBlock()->y, $event->getBlock()->z, $event->getBlock()->getLevel())));
 					break;
